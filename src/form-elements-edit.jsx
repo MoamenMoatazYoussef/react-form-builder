@@ -10,6 +10,8 @@ import DynamicOptionList from './dynamic-option-list';
 import { get } from './stores/requests';
 import ID from './UUID';
 
+import DataSourceSpecifier from "./components/DataSourceSpecifier";
+
 const toolbar = {
   options: ['inline', 'list', 'textAlign', 'fontSize', 'link', 'history'],
   inline: {
@@ -364,6 +366,9 @@ export default class FormElementsEdit extends React.Component {
             preview={this.props.preview}
             element={this.props.element}
             key={this.props.element.options.length} />
+        }
+        { true && 
+          <DataSourceSpecifier />
         }
       </div>
     );

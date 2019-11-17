@@ -7,6 +7,7 @@ import update from 'immutability-helper';
 import store from './stores/store';
 import FormElementsEdit from './form-elements-edit';
 import SortableFormElements from './sortable-form-elements';
+// import { Map } from 'immutable';
 
 const { PlaceHolder } = SortableFormElements;
 
@@ -21,7 +22,11 @@ export default class Preview extends React.Component {
     this.state = {
       data: [],
       answer_data: {},
+      // fieldBinder: Map({})
     };
+
+    this.fieldBinder = new Map();
+    // this.fieldBinder = [];
 
     const onUpdate = this._onChange.bind(this);
     store.subscribe(state => onUpdate(state.data));
@@ -99,12 +104,30 @@ export default class Preview extends React.Component {
 
   _onDestroy(item) {
     store.dispatch('delete', item);
+
+    // fieldBinder.delete(item.id);
+    // console.log(fieldBinder);
+
+    // this.setState({
+    //   fieldBinder
+    // });
   }
 
   insertCard(item, hoverIndex) {
     const { data } = this.state;
     data.splice(hoverIndex, 0, item);
     this.saveData(item, hoverIndex, hoverIndex);
+
+    this.fieldBinder.set(item.id, "none");
+    console.log(this.fieldBinder);
+    // console.log(this.fieldBinder);
+    // [
+    //   ...this.fieldBinder,
+    //   { 
+    //     item: item.id, 
+    //     field: "none" 
+    //   } 
+    // ];
   }
 
   moveCard(dragIndex, hoverIndex) {
@@ -130,7 +153,18 @@ export default class Preview extends React.Component {
 
   getElement(item, index) {
     const SortableFormElement = SortableFormElements[item.element];
-    return <SortableFormElement id={item.id} index={index} moveCard={this.moveCard} insertCard={this.insertCard} mutable={false} parent={this.props.parent} editModeOn={this.props.editModeOn} isDraggable={true} key={item.id} sortData={item.id} data={item} _onDestroy={this._onDestroy} />;
+    return <SortableFormElement 
+      id={item.id} 
+      index={index} 
+      moveCard={this.moveCard} 
+      insertCard={this.insertCard} 
+      mutable={false} 
+      parent={this.props.parent} 
+      editModeOn={this.props.editModeOn} 
+      isDraggable={true} key={item.id} 
+      sortData={item.id} data={item} 
+      _onDestroy={this._onDestroy} 
+    />;
   }
 
   render() {
